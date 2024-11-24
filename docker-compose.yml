@@ -1,0 +1,9 @@
+services:
+  bot:
+    restart: "always"
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: "api"
+    ports:
+      - 7909:8012

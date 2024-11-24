@@ -1,0 +1,20 @@
+database:
+  user: ""
+  name: ""
+  password: ""
+  host: "0.0.0.0"
+  port: 0
+
+jwt:
+  algorithm: "HS256"
+  secret: ""
+
+app:
+  host: "0.0.0.0"
+  port: 8001
+
+rabbitMq:
+  host: "0.0.0.0"
+  port: 0
+  username: ""
+  password: ""
