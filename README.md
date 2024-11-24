@@ -56,7 +56,7 @@ updates password
 
     POST: /transaction/send
 
-sends a transaction to receiver in case you have sufficient balance
+sends a transaction to receiver in case you have sufficient balance, returns transaction uuid
 
 <b>body example:</b>
 
