@@ -23,7 +23,7 @@ returns client`s data
             "uuid": "a724ce5b-f977-47e4-8ee2-8a39ffbfe93e",
             "login": "your-login",
             "password": "your-password",
-            "balance": 100
+            "balance": 100.0
         }
     }
 
@@ -57,11 +57,18 @@ sends a transaction to receiver in case you have sufficient balance
 
     "data": {
         "receiver_uuid": "a724ce5b-f977-47e4-8ee2-8a39ffbfe93e",
-        "amount": 100
+        "amount": 100.0
     }
 <b>response example:</b>
 
 
     "ok": true,
-    "message": "success",
-    "content": {}
+    "message": "processing transaction",
+    "content": {
+        "data": {
+            "uuid": "639e4024-1292-4308-9cf3-7787e7179b3c"
+        }
+    }
+
+<b>after transaction is processed, if your balance is sufficient, transaction status is set to "completed", if your balance is insufficient, transaction status is set to "cancelled"</b>
+

@@ -19,7 +19,7 @@ class TransactionController:
         self.producer = RabbitMqProducer(cfg=cfg, exchange="transactions", exchange_type="topic", logger=logger)
 
     def process(self, _ch: str, _method: str, _properties: str, body: bytes):
-        data = json.loads(body)
+        data = json.loads(json.loads(body))
         transaction = Transaction.get(uuid=data["uuid"])
         balance = self.client_controller.get_balance(transaction.sender_id)
         if transaction.amount > balance:
@@ -43,25 +43,25 @@ class TransactionController:
         receiver = self.client_controller.get_by_uuid(uuid=receiver_uuid)
         if not receiver:
             return 404, {'ok': False, 'message': 'receiver does not exist'}
-        data = funcs.create_transaction(
+        transaction_uuid = funcs.create_transaction(
             amount=amount, receiver_uuid=receiver_uuid, sender_id=sender.id, status="revised")
-        if not data:
+        if not transaction_uuid:
             return 404, {'ok': False, 'message': 'unable to create transaction'}
         self.producer.produce(
             data=json.dumps(
                 {
-                    "uuid": data["uuid"]
+                    "uuid": str(transaction_uuid)
                 }
             ),
             queue="processing"
         )
-        self.logger.info(f"TRANSACTION SENT TO PROCESSING QUEUE | uuid: {data['uuid']}")
+        self.logger.info(f"TRANSACTION SENT TO PROCESSING QUEUE | uuid: {transaction_uuid}")
         return 202, {
             'ok': True,
             'message': "processing transaction",
             'content': {
                 "data": {
-                    "uuid": data["uuid"]
+                    "uuid": transaction_uuid
                 }
             }
         }
