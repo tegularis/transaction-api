@@ -18,7 +18,7 @@ class TransactionController:
         self.logger = logger
         self.producer = RabbitMqProducer(cfg=cfg, exchange="transactions", exchange_type="topic", logger=logger)
 
-    def process_transaction(self, _ch: str, _method: str, _properties: str, body: bytes):
+    def process(self, _ch: str, _method: str, _properties: str, body: bytes):
         data = json.loads(body)
         transaction = Transaction.get(uuid=data["uuid"])
         balance = self.client_controller.get_balance(transaction.sender_id)
