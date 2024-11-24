@@ -9,7 +9,7 @@
 
 # authentication:
 
-every request must contain headers field <b>AUTH-TOKEN</b> containing a JWT-token obtained from <b>authorization</b> service
+every request must contain headers field <b>AUTH-TOKEN</b> containing a JWT-token obtained from <b>authorization</b> service (https://github.com/tegularis/transaction-auth)
 
 ---
 # methods:
