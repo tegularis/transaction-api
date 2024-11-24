@@ -24,7 +24,6 @@ class ClientController:
             'message': "success",
             'content': {
                 "data": {
-                    "id": client.id,
                     "uuid": client.uuid,
                     "login": client.login,
                     "password": client.password,

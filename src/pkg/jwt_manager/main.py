@@ -10,4 +10,4 @@ class JwtManager:
         return jwt.encode(payload, self.cfg["jwt"]["secret"], algorithm=self.cfg["jwt"]["algorithm"])
 
     def decode(self, token: str) -> Union[dict, None]:
-        return jwt.decode(token, self.cfg["jwt"]["secret"], algorithm=self.cfg["jwt"]["algorithm"])
+        return jwt.decode(token, self.cfg["jwt"]["secret"], algorithms=[self.cfg["jwt"]["algorithm"]])

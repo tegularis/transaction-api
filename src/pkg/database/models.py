@@ -102,10 +102,10 @@ class Transaction(Base):
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     uuid = Column(UUID, default=uuid.uuid4, index=True)
     date = Column(DateTime, default=func.current_timestamp())
-    status = Column(String, nullable=False)  # completed, cancelled, revised
+    status = Column(String, default="completed")
     amount = Column(Float, nullable=False)
     receiver_id = Column(Integer, ForeignKey(Client.id), nullable=False)
-    sender_id = Column(Integer, ForeignKey(Client.id), nullable=True),
+    sender_id = Column(Integer, ForeignKey(Client.id), nullable=True)
     CheckConstraint(amount > 0, name="positive_check")
 
     def __init__(self, amount: float, status: str, receiver_id: int, sender_id: int):

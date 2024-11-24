@@ -25,11 +25,11 @@ class TransactionRouter:
                 response.status_code = 400
                 return {'ok': False, 'message': 'bad request'}
             data = body["data"]
-            if not ("receiver_uuid" in data and "amount" in data and "status" in data):
+            if not ("receiver_uuid" in data and "amount" in data):
                 response.status_code = 400
                 return {'ok': False, 'message': 'bad request'}
             status_code, data = self.controller.send(
-                sender=client, receiver_uuid=data["receiver_uuid"], amount=data["amount"], status=data["status"])
+                sender=client, receiver_uuid=data["receiver_uuid"], amount=data["amount"])
             response.status_code = status_code
             return data
 
