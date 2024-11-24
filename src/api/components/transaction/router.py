@@ -47,7 +47,7 @@ class TransactionRouter:
             if side and side not in ["receiver", "sender"]:
                 response.status_code = 400
                 return {'ok': False, 'message': "invalid side"}
-            status_code, data = self.controller.get_all(
+            status_code, data = self.controller.get_history(
                 client=client, side=side, limit=limit, offset=offset, status=status)
             response.status_code = status_code
             return data

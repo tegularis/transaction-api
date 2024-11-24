@@ -2,6 +2,7 @@ import json
 from typing import Union
 
 from Tools.demo.mcast import receiver
+from sqlalchemy import asc
 
 from src.api.components.client.controller import ClientController
 from src.pkg.database import funcs
@@ -68,16 +69,32 @@ class TransactionController:
 
     def get_history(self, client: Client, side: str,
                     limit: Union[int, None], offset: Union[int, None], status: Union[str, None]):
-        match side:
-            case "receiver":
-                transactions = Transaction.get_all(receiver_id=client.id, status=status, limit=limit, offset=offset)
-            case "sender":
-                transactions = Transaction.get_all(sender_id=client.id, status=status, limit=limit, offset=offset)
-            case _:
-                transactions = Transaction.get_all(
-                    sender_id=client.id, status=status, limit=limit, offset=offset
-                ) + Transaction.get_all(
-                    receiver_id=client.id, status=status, limit=limit, offset=offset)
+        if status:
+            match side:
+                case "receiver":
+                    transactions = Transaction.get_all(receiver_id=client.id, status=status, limit=limit, offset=offset,
+                                                       order=asc(Transaction.id))
+                case "sender":
+                    transactions = Transaction.get_all(sender_id=client.id, status=status, limit=limit, offset=offset,
+                                                       order=asc(Transaction.id))
+                case _:
+                    transactions = Transaction.get_all(
+                        sender_id=client.id, status=status, limit=limit, offset=offset, order=asc(Transaction.id)
+                    ) + Transaction.get_all(
+                        receiver_id=client.id, status=status, limit=limit, offset=offset, order=asc(Transaction.id))
+        else:
+            match side:
+                case "receiver":
+                    transactions = Transaction.get_all(receiver_id=client.id, limit=limit, offset=offset,
+                                                       order=asc(Transaction.id))
+                case "sender":
+                    transactions = Transaction.get_all(sender_id=client.id, limit=limit, offset=offset,
+                                                       order=asc(Transaction.id))
+                case _:
+                    transactions = Transaction.get_all(
+                        sender_id=client.id, limit=limit, offset=offset, order=asc(Transaction.id)
+                    ) + Transaction.get_all(
+                        receiver_id=client.id, limit=limit, offset=offset, order=asc(Transaction.id))
         self.logger.info(f"CLIENT TRANSACTIONS HISTORY FETCHED | uuid: {client.uuid}")
         return 200, {
             'ok': True,
